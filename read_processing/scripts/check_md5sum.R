@@ -18,6 +18,14 @@ library(tools)
 
 # checksum_function -------------------------------------------------------
 
+# prepare output directory
+if(!dir.exists('output/')){
+  dir.create('output/')
+}
+if(!dir.exists('output/check_md5/')){
+  dir.create('output/check_md5/')
+}
+
 df_md5 <- tibble(path = c(input_read1, input_read2)) %>% 
   # get file path info
   dplyr::mutate(
