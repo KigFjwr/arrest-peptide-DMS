@@ -4,13 +4,12 @@
 score=20
 
 
-cd /Users/kfsci1/Dropbox/BioInfo/proj_2023/p100_DMS_packaging/dms_analysis
 mkdir -p output/fastp_qc/qc$score
 
 ## Loading the sample sheet
 input_sample_sheet=input/sample_sheet.csv
 
-while IFS=, read sample_number org bc5 bc7 sample_name read_exp || [ -n "${read_exp}" ]; do 
+while IFS=, read sample_number org object bc5 bc7 sample_name read_exp || [ -n "${read_exp}" ]; do 
       # If the first character is "#" then jump to the next loop, considering that line as a comment
      if [ ${sample_number:0:1} = "#" ]; then 
         continue
