@@ -24,6 +24,17 @@ library(gtools)
 # wrangling ---------------------------------------------------------------
 
 
+# prepare output directory
+if(!dir.exists('output/')){
+  dir.create('output/')
+}
+if(!dir.exists('output/')){
+  dir.create('output/')
+}
+
+
+
+
 # prep wild type sequence
 
 v_split_codon <- str_sub(input_string, start = seq(1, nchar(input_string), by = 3), end = seq(3, nchar(input_string), by = 3)) %>% print()

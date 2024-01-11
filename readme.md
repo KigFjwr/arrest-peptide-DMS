@@ -7,5 +7,5 @@ scripts are in a folder within read_processing and dms_analysis
 ### reuired
 - R
 - tidyverse
-- seqkit
-- etc
+- FastQC v0.12.1
+- SeqKit v2.5.1

@@ -2,9 +2,7 @@
 
 ## 0. preparation
 - demultiplexed read files , in input folder
-- 
--   
-note:   
+- prepare sample_sheet.csv
 
 
 ## 1. Prepare pattern list
