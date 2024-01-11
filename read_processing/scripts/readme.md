@@ -18,7 +18,7 @@ $ cd /path/to/read_processing
 $ Rscript scripts/check_md5sum.R [input/read1.fq.gz] [input/read2.fq.gz] [input/md5.txt]
 ```
 
-## 2. check read qualit
+## 2. check read quality
 script: fastqc_raw.sh  
 description: a code to check read quality  
 
@@ -35,7 +35,7 @@ note: fastq_sepalated folder will be created, but there is no need to keep it fo
 
 ```
 $ cd /path/to/read_processing
-$ zsh scripts/demultiplexing_seqkit.sh
+$ zsh scripts/demultiplexing_seqkit.sh [input/read_2.fq.gz]
 ```
 
 ---

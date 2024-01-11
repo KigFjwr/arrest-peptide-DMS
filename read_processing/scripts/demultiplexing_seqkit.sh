@@ -7,7 +7,8 @@ mkdir -p output/fastq_demultiplexed/
 
 
 # 1. Using "seqkit split" to split read_2 for each region with a barcode in the sequence
-seqkit split input/JM109_ApdP3825A_2.fq.gz -r 7:9 -O output/fastq_sepalated 
+# argument $1: input file, read_2
+seqkit split $1 -r 7:9 -O output/fastq_sepalated 
 
 
 
