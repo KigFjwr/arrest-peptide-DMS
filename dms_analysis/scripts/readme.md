@@ -3,6 +3,8 @@
 ## 0. preparation
 - demultiplexed read files , in input folder
 - prepare sample_sheet.csv
+-   
+note:   
 
 
 ## 1. Prepare pattern list
@@ -14,9 +16,7 @@ note: ランダム（N）などの入れ方によって、使用するスクリ�
 - NNXの場合は
 ```usage example
 $ cd /path/to/dms_analysis
-  $ cd /Users/kfsci1/Dropbox/BioInfo/proj_2023/p100_DMS_packaging/dms_analysis
 $ Rscript scripts/PrepPattern_NNN.R [peptide_name] [seq] [output file name]
-  $ Rscript scripts/PrepPattern_NNN.R ApdP CAGAGCAAGTGCATTCGCGCGCCGCCA output/ptn_ApdP_Q126toP134_NNN.csv
 ```
 
 ## 2. Read filteration
@@ -27,7 +27,9 @@ note: fastp is run by x64 architecture.
 ```
 $ cd /path/to/dms_analysis
 $ zsh scripts/quality_filtering_fastp.sh
+```
 
+```
 # fastp command
 $ fastp -i $input_read_1 -I $input_read_2 \
   -o $output_read_1 -O $output_read_2 \
@@ -65,19 +67,17 @@ note:
 
 ```
 $ cd /path/to/dms_analysis
-  $ cd /Users/kfsci1/Dropbox/BioInfo/proj_2023/p100_DMS_packaging/dms_analysis
-$ Rscript scripts/calc_change.R 
-  $ Rscript scripts/calc_change.R output/ptn_ApdP_Q126toP134_NNN.csv ATTGCGCCAGAGATGGCTCCTTCCCTGCCGGTGGCGAAAACCAGAATTGCGCGTCTCCCATCCTGT GCGGCGGGAGCCTTCCTTGACTATAAAGACGACGACGACAAA ApdP_Q126-P134_JM109 20 8 input/sample_sheet.csv
+$ Rscript scripts/calc_change.R [DMS-pattern list] [seq_5'] [seq_3'] [target] [q] [co] [sample_sheet]
 ```
 
-引数
+arguments
 - [DMS-pattern list]
-- [sequence (5'->3' direction) which locate upstream of DMS-target region]
-- [sequence (5'->3' direction) which locate downstream of DMS-target region]
-- [suffix of the output file name]
-- [phred quality score used] (default = 20)
-- [read cutoff score] (default = 8)
-- [sample_sheet file] (default = input/sample_sheet.csv)
+- [seq_5'] = sequence (5'->3' direction) which locate upstream of DMS-target region (e.g. ATTGCGCCAGAGATGGCTCCTTCCCTGCCGGTGGCGAAAACCAGAATTGCGCGTCTCCCATCCTGT)
+- [seq_3'] = sequence (5'->3' direction) which locate downstream of DMS-target region (e.g. GCGGCGGGAGCCTTCCTTGACTATAAAGACGACGACGACAAA)
+- [target] = target discreption, used as a suffix of the output file name (e.g. ApdP_Q126-P134_JM109)
+- [q] = phred quality score used (default = 20)
+- [co] = read cutoff score (default = 8)
+- [sample_sheet] = sample_sheet.csv (default = input/sample_sheet.csv)
 
 
 
@@ -88,10 +88,16 @@ required:
 note:   
 ```
 $ cd /path/to/dms_analysis
-  $ cd /Users/kfsci1/Dropbox/BioInfo/proj_2023/p100_DMS_packaging/dms_analysis
-$ Rscript scripts/plotting.R 
-  $ Rscript scripts/plotting.R ApdP_Q126-P134_JM109 126 134 output/calc/CalcFC_ApdP_Q126-P134_JM109.csv output/ptn_ApdP_Q126toP134_NNN.csv
+$ Rscript scripts/plotting.R [target] [Rstart] [Rend] [fitness list] [DMS-pattern list]
 ```
+
+arguments
+- [target] = target discreption, used as a suffix of the output file name (e.g. ApdP_Q126-P134_JM109)
+- [Rstart] = start residue number of DMS target region (eg 126)
+- [Rend] = last residue number of DMS target region (eg 134)
+- [fitness list] = an (eg output/calc/CalcFC_[target].csv)
+- [DMS-pattern list] = pattern list (eg ptn_[target]_NNN.csv)
+
 
 
 ---
