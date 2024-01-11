@@ -14,7 +14,8 @@ required: input/[read_1].fq.gz input/[read_2].fq.gz, input/md5.txt
 
 ```usage example
 $ cd /path/to/read_processing
-$ Rscript scripts/check_md5sum.R input/read_1.fq.gz input/read_2.fq.gz input/md5.txt
+  $ /Users/kfsci1/Dropbox/BioInfo/proj_2024/p102_DMS_ApdP_Q126-P132_PY79
+$ Rscript scripts/check_md5sum.R [input/read1.fq.gz] [input/read2.fq.gz] [input/md5.txt]
 ```
 
 ## 2. check read qualit
