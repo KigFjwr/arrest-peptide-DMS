@@ -86,7 +86,7 @@ input_region_3r = as.character(Biostrings::DNAStringSet(input_region_3f) %>% Bio
 # prepare output file names
 output_rpm <- str_c('output/calc/CalcRPM_', output_suffix, '.csv')
 output_fc <- str_c('output/calc/CalcFC_', output_suffix, '.csv')
-output_filter_out <- str_c('output/calc/CalcFC_JM109_', output_suffix, '_cutoff.csv')
+output_filter_out <- str_c('output/calc/CalcFC_', output_suffix, '_cutoff.csv')
 output_lacked <- str_c('output/calc/CalcFC_', output_suffix, '_lacked.csv')
 
 # prepare output directory
