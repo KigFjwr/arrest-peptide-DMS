@@ -49,7 +49,13 @@ library(ShortRead)
 # load input --------------------------------------------------------------
 
 # load sample sheet
-df_sample_sheet <- read_csv(sample_sheet) %>% dplyr::rename(sample_number = `#sample_number`) %>% print()
+df_sample_sheet <- read_csv(sample_sheet) %>% dplyr::rename(sample_number = `#sample_number`) %>%
+  bind_cols(
+    bc7_RevCom = as.character(
+      Biostrings::DNAStringSet(.$bc7) %>% 
+        Biostrings::reverseComplement()
+    )
+  )
 
 # load parttern sheet
 df_pattern <- read_csv(input_pattern) %>% 
@@ -64,7 +70,7 @@ df_pattern <- read_csv(input_pattern) %>%
 # input read files list
 read_files <- fs::dir_ls(path = 'output/fastp_qc/', recurse = T) %>% 
   str_subset(qc) %>% # select files filterd by phred score indicated
-  str_subset('read_2') %>% # select only read_2 (which contains random-mutation region)
+  str_subset('merged') %>% # select pair-end-merged file
   print()
 
 
@@ -100,18 +106,16 @@ if(!dir.exists('output/calc/')){
 
 df_readR_processed <- df_readR %>% 
   
-  
-  
   # filtering
-  ## filter by length
-  dplyr::filter(str_length(seq_raw) == 150) %>%
+  # filter by length
+  dplyr::filter(str_length(seq_raw) > 240) %>%
 
-  ## Select reads which has perfect region_3' 
-  dplyr::filter(str_detect(seq_raw, input_region_3r)) %>%
-  
   ## Select reads which has perfect region_5'
-  dplyr::filter(str_detect(seq_raw, input_region_5r)) %>%
-  
+  dplyr::filter(str_detect(seq_raw, input_region_5f)) %>%
+
+  ## Select reads which has perfect region_3'
+  dplyr::filter(str_detect(seq_raw, input_region_3f)) %>%
+
   # filtering
   ## filter by quality
   ## filter out reads in which 'N' found within (except for last residue)
@@ -129,36 +133,36 @@ df_readR_processed <- df_readR %>%
   
   dplyr::mutate(
     #bc7 = str_sub(seq_raw, 7, 9), 
-    bc7 = str_sub( # extract BC7 sequences
+    bc7_RevCom = str_sub( # extract BC7 sequences
       seq_raw,
-      str_locate(seq_raw, input_region_3r)[1] -3,
-      str_locate(seq_raw, input_region_3r)[1] -1
+      str_locate(seq_raw, input_region_3f)[,2] +1,
+      str_locate(seq_raw, input_region_3f)[,2] +3
     ),
     #seq_gene = str_sub(seq_raw, 10, -1), # trim adapter region
     seq_gene = str_sub(# trim adapter region
       seq_raw, 
-      str_locate(seq_raw, input_region_3r)[1],
-      str_locate(seq_raw, input_region_5r)[,2]
+      str_locate(seq_raw, input_region_5f)[1],
+      str_locate(seq_raw, input_region_3f)[,2]
     ), 
-    seq_target_R = str_sub( # Extract scanning target region (ApdP(126-134))
+    seq_target = str_sub( # Extract scanning target region (ApdP(126-134))
       seq_raw,
-      str_locate(seq_raw, input_region_3r)[,2] +1,
-      str_locate(seq_raw, input_region_5r)[1]-1
+      str_locate(seq_raw, input_region_5f)[,2] +1,
+      str_locate(seq_raw, input_region_3f)[1] -1
     )
-  ) %>%
-  
-  
+  ) %>% 
   
   # formatting
-  dplyr::left_join(df_sample_sheet %>% dplyr::select(sample_number, bc7, sample_name), by = 'bc7') %>% 
+  dplyr::left_join(df_sample_sheet %>% dplyr::select(sample_number, bc7, bc7_RevCom, sample_name), by = 'bc7_RevCom') %>% 
   dplyr::select(sample_number, sample_name, bc7, name, everything()) %>%
+  dplyr::filter(!is.na(bc7)) %>% 
   print()
 
 
 
 # mapping to df_pattern
 df_readR_mapped <- df_pattern %>%
-  left_join(df_readR_processed, by = c('seq_r' = 'seq_target_R')) %>% print()
+  left_join(df_readR_processed, by = c('seq' = 'seq_target')) %>% 
+  dplyr::filter(!is.na(sample_number)) %>% print()
 
 
 
