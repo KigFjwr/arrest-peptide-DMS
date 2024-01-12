@@ -19,17 +19,26 @@ while IFS=, read sample_number org object bc5 bc7 sample_name read_exp || [ -n "
   echo input/$sample_name/*2.fq.gz | read input_read_2
   echo output/fastp_qc/qc$score/${sample_name}_read_1_qc${score}.fq.gz | read output_read_1
   echo output/fastp_qc/qc$score/${sample_name}_read_2_qc${score}.fq.gz | read output_read_2
+  echo output/fastp_qc/qc$score/${sample_name}_merged_qc${score}.fq.gz | read output_read_m
+  echo output/fastp_qc/qc$score/${sample_name}_unpair_1_qc${score}.fq.gz | read output_unpair_1
+  echo output/fastp_qc/qc$score/${sample_name}_unpair_2_qc${score}.fq.gz | read output_unpair_2
 
-  fastp -i $input_read_1 -I $input_read_2 \
-  -o $output_read_1 -O $output_read_2 \
+  fastp \
+  -q $score \
+  -i $input_read_1 \
+  -I $input_read_2 \
+  -o $output_read_1 \
+  -O $output_read_2 \
+  --merged_out $output_read_m \
+  --unpaired1 $output_unpair_1 \
+  --unpaired2 $output_unpair_2 \
   -h output/fastp_qc/qc$score/report_${sample_name}.html \
   -j output/fastp_qc/qc$score/report_${sample_name}.json \
-  -q $score \
+  -c \
+  -m \
   -e 35 \
   -l 20 \
   -w 8
 
 done < $input_sample_sheet
-
-
 
