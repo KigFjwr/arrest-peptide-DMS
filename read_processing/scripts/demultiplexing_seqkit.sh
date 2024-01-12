@@ -7,8 +7,10 @@ mkdir -p output/fastq_demultiplexed/
 
 
 # 1. Using "seqkit split" to split read_2 for each region with a barcode in the sequence
-# argument $1: input file, read_2
-seqkit split $1 -r 7:9 -O output/fastq_sepalated 
+# argument $1: input file, read_1
+file_read_1=$1
+# argument $2: input file, read_2
+seqkit split $2 -r 7:9 -O output/fastq_sepalated 
 
 
 
@@ -49,8 +51,6 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}
 
     # Configuring the read_2 file
     echo output/fastq_sepalated/tmp/${sample_name}.fq.gz | read file_read_2
-    # Configuring the read_1 file
-    echo input/*_1.fq.gz | read file_read_1
     echo $file_read_1 $file_read_2
     
     # Matching the pairs of paired-end reads with "seqkit pair".

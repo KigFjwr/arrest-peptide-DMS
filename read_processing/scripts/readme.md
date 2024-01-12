@@ -14,7 +14,6 @@ required: input/[read_1].fq.gz input/[read_2].fq.gz, input/md5.txt
 
 ```usage example
 $ cd /path/to/read_processing
-  $ /Users/kfsci1/Dropbox/BioInfo/proj_2024/p102_DMS_ApdP_Q126-P132_PY79
 $ Rscript scripts/check_md5sum.R [input/read1.fq.gz] [input/read2.fq.gz] [input/md5.txt]
 ```
 
@@ -35,7 +34,7 @@ note: fastq_sepalated folder will be created, but there is no need to keep it fo
 
 ```
 $ cd /path/to/read_processing
-$ zsh scripts/demultiplexing_seqkit.sh [input/read_2.fq.gz]
+$ zsh scripts/demultiplexing_seqkit.sh [input/read_1.fq.gz] [input/read_2.fq.gz]
 ```
 
 ---
