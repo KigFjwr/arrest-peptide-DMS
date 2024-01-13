@@ -10,3 +10,5 @@ scripts are in a folder within read_processing and dms_analysis
 - FastQC v0.12.1
 - SeqKit v2.5.1
 - fastp v0.23.4
+
+
