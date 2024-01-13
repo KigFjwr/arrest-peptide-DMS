@@ -1,7 +1,5 @@
-
-read_processing/input/.DS_Store
 .DS_Store
-read_processing/scripts/.Rhistory
+.Rhistory
 .Rproj.user
 .gitattributes
 .gitignore
