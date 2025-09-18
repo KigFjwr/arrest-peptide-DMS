@@ -6,8 +6,9 @@ score=20
 
 mkdir -p output/fastp_qc/qc$score
 
-## Loading the sample sheet
-input_sample_sheet=input/sample_sheet.csv
+## Load the sample sheet
+# argument $1: sample_sheet_library.csv
+input_sample_sheet=$1
 
 while IFS=, read sample_number org object bc5 bc7 sample_name read_exp || [ -n "${read_exp}" ]; do 
       # If the first character is "#" then jump to the next loop, considering that line as a comment
@@ -15,8 +16,8 @@ while IFS=, read sample_number org object bc5 bc7 sample_name read_exp || [ -n "
         continue
      fi
   
-  echo input/$sample_name/*1.fq.gz | read input_read_1
-  echo input/$sample_name/*2.fq.gz | read input_read_2
+  echo output/fastq_demultiplexed/$sample_name/*1.fq.gz | read input_read_1
+  echo output/fastq_demultiplexed/$sample_name/*2.fq.gz | read input_read_2
   echo output/fastp_qc/qc$score/${sample_name}_read_1_qc${score}.fq.gz | read output_read_1
   echo output/fastp_qc/qc$score/${sample_name}_read_2_qc${score}.fq.gz | read output_read_2
   echo output/fastp_qc/qc$score/${sample_name}_merged_qc${score}.fq.gz | read output_read_m

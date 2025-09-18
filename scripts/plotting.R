@@ -117,7 +117,8 @@ p_rep_c <- df_plot %>%
   dplyr::select(pattern_number, seq_aa, wtmt, HasStopCodon, motif, conc_antibiotic, rep_selection, FC_RPM_std) %>% 
   dplyr::mutate(rep_selection=str_c('n', rep_selection)) %>% 
   tidyr::pivot_wider(names_from = rep_selection, values_from = FC_RPM_std) %>% 
-  ggplot(aes(n1, n2)) +
+  dplyr::rename(rep1=n1, rep2=n2) %>% 
+  ggplot(aes(rep1, rep2)) +
   geom_point(color = 'grey20', alpha = 0.5, shape = 16, size = 0.8) +
   facet_wrap(~conc_antibiotic) +
   ggtitle('Codon level', 'FC_RPM values (scaled) of each mutant are plotted')
@@ -130,7 +131,8 @@ p_rep_a <- df_plot %>%
   dplyr::group_by(conc_antibiotic, rep_selection, seq_aa) %>% 
   dplyr::reframe(FC_RPM_aa = mean(FC_RPM_std), n=n()) %>% 
   tidyr::pivot_wider(names_from = rep_selection, values_from = FC_RPM_aa) %>% 
-  ggplot(aes(n1, n2)) +
+  dplyr::rename(rep1=n1, rep2=n2) %>% 
+  ggplot(aes(rep1, rep2)) +
   geom_point(color = 'grey20', alpha = 0.5, shape = 16, size = 0.8) +
   facet_wrap(~conc_antibiotic) +
   ggtitle('AA level', 'mean FC_RPM values (scaled) of each amino acid sequence are plotted')

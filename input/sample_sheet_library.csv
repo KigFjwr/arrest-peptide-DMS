@@ -1,0 +1,9 @@
+#sample_number,org,object,bc5,bc7,sample_name,read_exp,antibiotic,conc_antibiotic,time,rep_cell_lib,rep_selection,rep_DNA_lib,cfu,culture_min,reads_pe1,reads_pe2
+1,bs,SecM,TGG,ACC,SecM_PY79_t1_rep1,RH240610534,spec,0,t1,1,1,1,0.42,0,PY79_SecM3Y09B_1.fq.gz,PY79_SecM3Y09B_2.fq.gz
+2,bs,SecM,TGG,AGC,SecM_PY79_t2_s0_rep1,RH240610534,spec,0,t2,1,1,1,10.08,90,PY79_SecM3Y09B_1.fq.gz,PY79_SecM3Y09B_2.fq.gz
+3,bs,SecM,TGG,AGG,SecM_PY79_t2_s200_rep1,RH240610534,spec,500,t2,1,1,1,7.26,110,PY79_SecM3Y09B_1.fq.gz,PY79_SecM3Y09B_2.fq.gz
+4,bs,SecM,TGG,CTC,SecM_PY79_t2_s500_rep1,RH240610534,spec,1000,t2,1,1,1,5.44,136,PY79_SecM3Y09B_1.fq.gz,PY79_SecM3Y09B_2.fq.gz
+5,bs,SecM,TGG,CTG,SecM_PY79_t1_rep2,RH240610534,spec,0,t1,1,2,1,0.52,0,PY79_SecM3Y09B_1.fq.gz,PY79_SecM3Y09B_2.fq.gz
+6,bs,SecM,TGG,TGC,SecM_PY79_t2_s0_rep2,RH240610534,spec,0,t2,1,2,1,8.2,113,PY79_SecM3Y09B_1.fq.gz,PY79_SecM3Y09B_2.fq.gz
+7,bs,SecM,TGG,TTA,SecM_PY79_t2_s200_rep2,RH240610534,spec,500,t2,1,2,1,7.08,136,PY79_SecM3Y09B_1.fq.gz,PY79_SecM3Y09B_2.fq.gz
+8,bs,SecM,TGG,TTG,SecM_PY79_t2_s500_rep2,RH240610534,spec,1000,t2,1,2,1,7.88,180,PY79_SecM3Y09B_1.fq.gz,PY79_SecM3Y09B_2.fq.gz

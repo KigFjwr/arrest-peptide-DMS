@@ -1,4 +1,0 @@
-568fedbf3c522e282d8c1a34440d4e3e	XXX_read_1.fq.gz
-c32e6c890938e00874c258888875ef21	XXX_read_2.fq.gz
-7ec164ea2b7e150ed898cfd6001632ae	YYY_read_1.fq.gz
-1484419dbd1fce81b771486e88a958ae	YYY_read_1.fq.gz

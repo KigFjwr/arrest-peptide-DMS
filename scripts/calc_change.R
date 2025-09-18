@@ -9,33 +9,34 @@ args[default_flg] <- default_args[default_flg]
 
 
 # argument 1: input file name of DMS-pattern list
-# example: input_pattern <- 'output/ptn_ApdP_Q126toP134_NNN.csv'
+# example: input_pattern <- 'output/ptn_CdCliM_K38toK77_NNN.csv'
 input_pattern <- args[1]
 
 # argument 2: input sequence (5'->3' direction) which locate upstream of DMS-target region
-# example: input_region_5f <- 'ATTGCGCCAGAGATGGCTCCTTCCCTGCCGGTGGCGAAAACCAGAATTGCGCGTCTCCCATCCTGT' # ApdP(104-125) 5'->3'
+# example: input_region_5f <- 'AGAGACCACATGGTCCTTCTTGAGTTTGTAACAGCTGCTGGGATTACACATGGCATGGATGAACTATACAAAAAAGACCTCTTAAATCATAAAATT' # ApdP(104-125) 5'->3'
 input_region_5f <- args[2]
 
 # argument 3: input sequence (5'->3' direction) which locate downstream of DMS-target region
-# example: input_region_3f <- 'GCGGCGGGAGCCTTCCTTGACTATAAAGACGACGACGACAAA' # ApdP(135-140)-FLAG, 
+# example: input_region_3f <- 'GACTATAAAGACGACGACGACAAA' # ApdP(135-140)-FLAG, 
 input_region_3f <- args[3]
 
 # argument 4: suffix of the output file name
-# example: output_suffix <- 'ApdP_Q126-P134_JM109'
+# example: output_suffix <- 'CliM_K38-K77_PY79'
 output_suffix <- args[4]
 
 
 # optional
 
 # argument 5: phred quality score used
-# default = '20'
+# default: qc = '20'
 qc <- args[5]
 
 # argument 6: read cutoff score
-# default = 8
+# default: read_cutoff = 8
 read_cutoff <- as.numeric(args[6])
 
 # argument 7: sample_sheet file
+# sample_sheet <- 'input/sample_sheet_library.csv'
 sample_sheet <- args[7]
 
   
@@ -249,8 +250,7 @@ df_change <- df_RPM %>%
     # standardization, Min-Max normalization
     FC_RPM_std = scale(FC_RPM, center = min(FC_RPM, na.rm=T), scale = max(FC_RPM, na.rm=T) - min(FC_RPM, na.rm=T))[,1]
   ) %>% 
-  ungroup() %>% 
-  glimpse()
+  ungroup()
 
 
 df_change %>% 

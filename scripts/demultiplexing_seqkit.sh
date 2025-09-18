@@ -1,8 +1,11 @@
-#!/bin/zsh
+#!/usr/bin/zsh
+set -e
+set -u
+set -o pipefail
 
 # 0. Preparing the directory
-mkdir -p output/fastq_sepalated/
-mkdir -p output/fastq_sepalated/tmp/
+mkdir -p output/fastq_separated/
+mkdir -p output/fastq_separated/tmp/
 mkdir -p output/fastq_demultiplexed/
 
 
@@ -10,14 +13,14 @@ mkdir -p output/fastq_demultiplexed/
 # argument $1: input file, read_1
 file_read_1=$1
 # argument $2: input file, read_2
-seqkit split $2 -r 7:9 -O output/fastq_sepalated 
+seqkit split $2 -r 7:9 -O output/fastq_separated 
 
 
 
 # 2. From the files split by barcode, rename only the necessary ones to the sample names listed in the pre-prepared sample sheet
 
-## Loading the sample sheet
-input_sample_sheet=input/sample_sheet_read_proc.csv
+## load the sample sheet
+input_sample_sheet=input/sample_sheet_bc.csv
 
 while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}" ]; do # Ensure the ability to read until the last line even if there is no newline code at the end of the final line
 
@@ -27,9 +30,9 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}
      fi
      
      # Setting up the source file for copying
-     echo output/fastq_sepalated/*$bc7.fq.gz | read copy_from
+     echo output/fastq_separated/*$bc7.fq.gz | read copy_from
      # Setting up the destination file name for copying
-     echo output/fastq_sepalated/tmp/${sample_name}.fq.gz | read copy_to
+     echo output/fastq_separated/tmp/${sample_name}.fq.gz | read copy_to
      # print
      echo $copy_from $copy_to
      # copy
@@ -50,7 +53,7 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}
     mkdir -p output/fastq_demultiplexed/${sample_name}
 
     # Configuring the read_2 file
-    echo output/fastq_sepalated/tmp/${sample_name}.fq.gz | read file_read_2
+    echo output/fastq_separated/tmp/${sample_name}.fq.gz | read file_read_2
     echo $file_read_1 $file_read_2
     
     # Matching the pairs of paired-end reads with "seqkit pair".

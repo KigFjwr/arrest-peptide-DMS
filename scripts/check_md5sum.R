@@ -9,7 +9,7 @@ input_read2 <- args[2]
 input_md5 <- args[3]
 
 # output name
-output <- 'output/check_md5/check_md5.csv'
+output <- 'output/md5/check_md5.csv'
 
 # load package ------------------------------------------------------------
 
@@ -22,8 +22,8 @@ library(tools)
 if(!dir.exists('output/')){
   dir.create('output/')
 }
-if(!dir.exists('output/check_md5/')){
-  dir.create('output/check_md5/')
+if(!dir.exists('output/md5/')){
+  dir.create('output/md5/')
 }
 
 df_md5 <- tibble(path = c(input_read1, input_read2)) %>% 
