@@ -3,7 +3,7 @@
 
 args <- commandArgs(trailingOnly = T)
 
-default_args <- c("", "", "", "", "20", '8', 'input/sample_sheet.csv')   # default setting
+default_args <- c("", "", "", "", "20", '8', '240', 'input/sample_sheet.csv')   # default setting
 default_flg <- is.na(args[1:7])
 args[default_flg] <- default_args[default_flg]  
 
@@ -35,9 +35,13 @@ qc <- args[5]
 # default: read_cutoff = 8
 read_cutoff <- as.numeric(args[6])
 
-# argument 7: sample_sheet file
+# argument 7: filtering length
+# default: len_filter = 240
+len_filter <- as.numeric(args[7])
+
+# argument 8: sample_sheet file
 # sample_sheet <- 'input/sample_sheet_library.csv'
-sample_sheet <- args[7]
+sample_sheet <- args[8]
 
   
 # load package ------------------------------------------------------------
@@ -109,7 +113,7 @@ df_readR_processed <- df_readR %>%
   
   # filtering
   # filter by length
-  dplyr::filter(str_length(seq_raw) > 240) %>%
+  dplyr::filter(str_length(seq_raw) > len_filter) %>%
 
   ## Select reads which has perfect region_5'
   dplyr::filter(str_detect(seq_raw, input_region_5f)) %>%
