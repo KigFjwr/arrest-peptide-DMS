@@ -3,24 +3,33 @@ set -e
 set -u
 set -o pipefail
 
-# 0. Preparing the directory
+#-------------------------------------------
+
+# Arguments
+
+# argument $1: input file, read_1
+file_read_1=$1
+# argument $2: input file, read_2
+file_read_2=$2
+# argument $3: input file, sample sheet
+sample_sheet=${3:-input/sample_sheet.csv}
+
+
+#-------------------------------------------
+
+
+# 0. Prepare directories
 mkdir -p output/fastq_separated/
 mkdir -p output/fastq_separated/tmp/
 mkdir -p output/fastq_demultiplexed/
 
 
 # 1. Using "seqkit split" to split read_2 for each region with a barcode in the sequence
-# argument $1: input file, read_1
-file_read_1=$1
-# argument $2: input file, read_2
-seqkit split $2 -r 7:9 -O output/fastq_separated 
+seqkit split $file_read_2 -r 7:9 -O output/fastq_separated 
 
 
 
 # 2. From the files split by barcode, rename only the necessary ones to the sample names listed in the pre-prepared sample sheet
-
-## load the sample sheet
-input_sample_sheet=input/sample_sheet_bc.csv
 
 while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}" ]; do # Ensure the ability to read until the last line even if there is no newline code at the end of the final line
 
@@ -38,7 +47,7 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}
      # copy
      cp $copy_from $copy_to
 
-done < $input_sample_sheet
+done < $sample_sheet
 
 
 
@@ -64,4 +73,7 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}
     mv output/fastq_demultiplexed/${sample_name}/${file_read_2##*/} output/fastq_demultiplexed/${sample_name}/${sample_name}_read_2.fq.gz
 
 
-done < $input_sample_sheet
+done < $sample_sheet
+
+# last update
+# 2025/09/30
