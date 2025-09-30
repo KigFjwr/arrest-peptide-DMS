@@ -9,8 +9,10 @@ set -o pipefail
 
 # argument $1: input file, read_1
 file_read_1=$1
+
 # argument $2: input file, read_2
 file_read_2=$2
+
 # argument $3: input file, sample sheet
 sample_sheet=${3:-input/sample_sheet.csv}
 
