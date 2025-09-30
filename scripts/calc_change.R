@@ -35,7 +35,7 @@ qc <- args[5]
 # default: read_cutoff = 8
 read_cutoff <- as.numeric(args[6])
 
-# argument 7: filtering length
+# argument 7: filtering length (between bc5 and bc7, exclusive)
 # default: len_filter = 240
 len_filter <- as.numeric(args[7])
 
@@ -143,13 +143,13 @@ df_readR_processed <- df_readR %>%
       str_locate(seq_raw, input_region_3f)[,2] +1,
       str_locate(seq_raw, input_region_3f)[,2] +3
     ),
-    #seq_gene = str_sub(seq_raw, 10, -1), # trim adapter region
-    seq_gene = str_sub(# trim adapter region
+    #seq_gene = str_sub(seq_raw, 10, -1), # remove adapter region
+    seq_gene = str_sub(
       seq_raw, 
       str_locate(seq_raw, input_region_5f)[1],
       str_locate(seq_raw, input_region_3f)[,2]
     ), 
-    seq_target = str_sub( # Extract scanning target region (ApdP(126-134))
+    seq_target = str_sub( # Extract DMS target region (ApdP(126-134))
       seq_raw,
       str_locate(seq_raw, input_region_5f)[,2] +1,
       str_locate(seq_raw, input_region_3f)[1] -1
