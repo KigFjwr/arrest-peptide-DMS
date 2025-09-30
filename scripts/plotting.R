@@ -7,28 +7,38 @@ default_args <- c("", "", "", "", "", "output/fig/reproducibility.pdf", 'output/
 default_flg <- is.na(args[1:8])
 args[default_flg] <- default_args[default_flg]  
 
-# argument 1: target name, like 'ApdP_Q126-P134_JM109'
+# argument 1: target name
+# example: input_target <- 'CliM_K38-K77_PY79'
 input_target <- args[1]
 
-# argument 2: DMS_start residue number, like 126
+# argument 2: DMS_start residue number
+# example: input_target_AA_number_s <- 38
 input_target_AA_number_s <- as.numeric(args[2])
 
-# argument 3: DMS_end residue number, like 134
+# argument 3: DMS_end residue number
+# example: input_target_AA_number_e <- 77
 input_target_AA_number_e <- as.numeric(args[3])
 
-# argument 4: input csv file, fitness list, like 'output/calc/CalcFC_ApdP_Q126-P134_JM109.csv'
+# argument 4: input csv file, fitness list
+# example: input_calc_FC <- 'output/calc/CalcFC_CliM_K38-K77_PY79_qc30.csv'
 input_calc_FC <- args[4]
 
-# argument 5: input csv file, mutation pattern list, like 'output/ptn_ApdP_Q126toP134_NNN.csv'
+# argument 5: input csv file, mutation pattern list
+# example: input_pattern <- 'output/ptn_CliM_38to77_NNK.csv'
 input_pattern <-  args[5]
 
 
 # optional arguments
 # argument 6: output plot file name, scatter plot
+# example: output_plot_rep <- 'output/fig/reproducibility.pdf'
 output_plot_rep <- args[6]
+
 # argument 7: output plot file name, heat map
+# example: output_plot_heat <- 'output/fig/heatmap.pdf'
 output_plot_heat <- args[7]
+
 # argument 8: input file name, plot order
+# example: input_plot_order <- 'input/plot_order.csv'
 input_plot_order <- args[8]
 
 # output_plot_het_cd <- 'output/fig/heatmap_codon.pdf'
@@ -60,28 +70,6 @@ if(!dir.exists('output/fig/')){
 
 # formatting --------------------------------------------------------------
 
-# df_aa_pattern <- df_pattern %>% 
-#   select(object, wtmt, seq_aa, stop, motif) %>%
-#   distinct() %>% 
-#   filter(!(wtmt=='mt' & seq_aa == 'QSKCIRAPP'))
-
-df_aa_pattern <- df_pattern %>% 
-  select(seq_aa) %>% 
-  distinct() %>% 
-  mutate(aa_pattern_number = row_number()) %>% 
-  left_join(
-    df_pattern %>% 
-      select(seq_aa) %>% 
-      distinct() %>% 
-      mutate(aa_pattern_number = row_number()) %>% 
-      tidyr::separate(
-        col = seq_aa,
-        into = paste0("r", 0:9),  # 新しい列の名前
-        sep = ""
-      )
-  ) %>% 
-  dplyr::select(aa_pattern_number, seq_aa, r1:r9)
-
 
 
 # prepare list of amino acid with their order on plot
@@ -105,10 +93,6 @@ df_ac_order <- df_order %>% select(plot_order, aa=custom_1) %>% filter(!is.na(aa
   dplyr::mutate(plot_order = row_number()) 
 
 
-# df_cd_order <- df_order %>% select(plot_order, codon=custom_4) %>% filter(!is.na(codon))
-
-
-
 
 # plotting, reproducibility -----------------------------------------------
 
@@ -117,8 +101,7 @@ p_rep_c <- df_plot %>%
   dplyr::select(pattern_number, seq_aa, wtmt, HasStopCodon, motif, conc_antibiotic, rep_selection, FC_RPM_std) %>% 
   dplyr::mutate(rep_selection=str_c('n', rep_selection)) %>% 
   tidyr::pivot_wider(names_from = rep_selection, values_from = FC_RPM_std) %>% 
-  dplyr::rename(rep1=n1, rep2=n2) %>% 
-  ggplot(aes(rep1, rep2)) +
+  ggplot(aes(n1, n2)) +
   geom_point(color = 'grey20', alpha = 0.5, shape = 16, size = 0.8) +
   facet_wrap(~conc_antibiotic) +
   ggtitle('Codon level', 'FC_RPM values (scaled) of each mutant are plotted')
@@ -131,8 +114,7 @@ p_rep_a <- df_plot %>%
   dplyr::group_by(conc_antibiotic, rep_selection, seq_aa) %>% 
   dplyr::reframe(FC_RPM_aa = mean(FC_RPM_std), n=n()) %>% 
   tidyr::pivot_wider(names_from = rep_selection, values_from = FC_RPM_aa) %>% 
-  dplyr::rename(rep1=n1, rep2=n2) %>% 
-  ggplot(aes(rep1, rep2)) +
+  ggplot(aes(n1, n2)) +
   geom_point(color = 'grey20', alpha = 0.5, shape = 16, size = 0.8) +
   facet_wrap(~conc_antibiotic) +
   ggtitle('AA level', 'mean FC_RPM values (scaled) of each amino acid sequence are plotted')
@@ -225,72 +207,3 @@ ggsave(
   height = 12
 )
 
-# ggsave(
-#   output_plot_het_cd, 
-#   p_heat_codon, 
-#   width = 9*(input_target_AA_number_e - input_target_AA_number_s)/10, 
-#   height = 9
-# )
-# ggsave(
-#   output_plot_het_aa, 
-#   p_heat_aa, 
-#   width = 9*(input_target_AA_number_e - input_target_AA_number_s)/10, 
-#   height = 6
-# )
-
-
-
-
-# Rx ----------------------------------------------------------------------
-
-
-# 
-# df_plot %>% 
-#   mutate(
-#     color = case_when(
-#       wtmt == 'wt' ~ '1',
-#       stop == T ~ '2',
-#       #wtmt == 'mt' ~ '#FF4B00'
-#     )
-#   ) %>% 
-#   group_by(pattern_number, conc_antibiotic, rep_cell_lib) %>% 
-#   mutate(mean_FC = mean(FC_RPM_std)) %>% 
-#   ungroup() %>% 
-#   #mutate(motif = if_else(stop == T, 'stop', motif)) %>%
-#   mutate(motif = if_else(str_detect(seq_aa, 'QSKCIRAPP'), 'WT', motif)) %>%
-#   #filter(motif %in% c('RAPP','RGPP', 'AAPP', 'RAPA', 'RAAP', 'RAGP', 'stop', 'WT')) %>%
-#   
-#   ggplot(aes(x = motif, y = mean_FC, color = color, fill = color)) +
-#   geom_point() +
-#   # geom_point(
-#   #shape = 1,
-#   #   size = 1,
-#   #   stroke = 1,
-#   #   alpha = 0.4,
-#   #   position = position_jitter(
-#   #     width = 0.1,
-#   #     height = 0,
-#   #     seed = 328
-#   #   )
-#   # ) +
-# #scale_y_continuous(limits = c(0,2.5))+
-# facet_wrap(rep_selection~conc_antibiotic)
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# df_plot %>% 
-#   select(seq, seq_aa, wtmt, conc_antibiotic, rep_selection, FC_RPM_std) %>% 
-#   mutate(rep_selection=str_c('n', rep_selection)) %>% 
-#   pivot_wider(names_from = rep_selection, values_from = FC_RPM_std) %>% 
-#   filter(conc_antibiotic != 0) %>% 
-#   mutate(tmp=n1-n2) %>% 
-#   arrange(tmp)
-# 
-# df_plot %>% 
-#   filter(is.na(FC_RPMa)) %>% 
-#   select(object:motif) %>% 
-#   write_csv('c.csv')
