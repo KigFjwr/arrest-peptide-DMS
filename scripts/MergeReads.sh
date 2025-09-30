@@ -1,16 +1,27 @@
-#!/bin/zsh
+#!/usr/bin/zsh
+set -e
+set -u
+set -o pipefail
 
-# input
-score=20
+#-------------------------------------------
+
+# Arguments
+
+# argument $1: input file, sample sheet
+sample_sheet=${1:-input/sample_sheet.csv}
+
+# argument $2: QC cutoff score
+score=${2:-30}
 
 
+#-------------------------------------------
+
+# 0. Prepare directories
 mkdir -p output/fastp_qc/qc$score
 
-## Load the sample sheet
-# argument $1: sample_sheet_library.csv
-input_sample_sheet=$1
 
-while IFS=, read sample_number org object bc5 bc7 sample_name read_exp || [ -n "${read_exp}" ]; do 
+# 1. read processing
+while IFS=, read sample_number bc5 bc7 sample_name read_exp lib_len target|| [ -n "${read_exp}" ]; do 
       # If the first character is "#" then jump to the next loop, considering that line as a comment
      if [ ${sample_number:0:1} = "#" ]; then 
         continue
@@ -38,8 +49,8 @@ while IFS=, read sample_number org object bc5 bc7 sample_name read_exp || [ -n "
   -c \
   -m \
   -e 35 \
-  -l 20 \
+  -l $lib_len \
   -w 8
 
-done < $input_sample_sheet
+done < $sample_sheet
 
