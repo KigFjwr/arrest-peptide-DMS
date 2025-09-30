@@ -99,9 +99,9 @@ df_ac_order <- df_order %>% select(plot_order, aa=custom_1) %>% filter(!is.na(aa
 # codon
 p_rep_c <- df_plot %>% 
   dplyr::select(pattern_number, seq_aa, wtmt, HasStopCodon, motif, conc_antibiotic, rep_selection, FC_RPM_std) %>% 
-  dplyr::mutate(rep_selection=str_c('n', rep_selection)) %>% 
+  dplyr::mutate(rep_selection=str_c('rep_', rep_selection)) %>% 
   tidyr::pivot_wider(names_from = rep_selection, values_from = FC_RPM_std) %>% 
-  ggplot(aes(n1, n2)) +
+  ggplot(aes(rep_1, rep_2)) +
   geom_point(color = 'grey20', alpha = 0.5, shape = 16, size = 0.8) +
   facet_wrap(~conc_antibiotic) +
   ggtitle('Codon level', 'FC_RPM values (scaled) of each mutant are plotted')
@@ -110,11 +110,11 @@ p_rep_c <- df_plot %>%
 # aa
 p_rep_a <- df_plot %>% 
   dplyr::select(pattern_number, seq_aa, conc_antibiotic, rep_selection, FC_RPM_std) %>% 
-  dplyr::mutate(rep_selection=str_c('n', rep_selection)) %>% 
+  dplyr::mutate(rep_selection=str_c('rep_', rep_selection)) %>% 
   dplyr::group_by(conc_antibiotic, rep_selection, seq_aa) %>% 
   dplyr::reframe(FC_RPM_aa = mean(FC_RPM_std), n=n()) %>% 
   tidyr::pivot_wider(names_from = rep_selection, values_from = FC_RPM_aa) %>% 
-  ggplot(aes(n1, n2)) +
+  ggplot(aes(rep_1, rep_2)) +
   geom_point(color = 'grey20', alpha = 0.5, shape = 16, size = 0.8) +
   facet_wrap(~conc_antibiotic) +
   ggtitle('AA level', 'mean FC_RPM values (scaled) of each amino acid sequence are plotted')
@@ -134,11 +134,11 @@ ggsave(output_plot_rep, p_rep, width = 6, height = 6)
 p_heat_codon <- df_FC %>% 
   dplyr::select(seq, mt_res, conc_antibiotic, rep_selection, FC_RPM_std) %>% 
   dplyr::mutate(
-    rep_selection=str_c('n', rep_selection)
+    rep_selection=str_c('rep_', rep_selection)
   ) %>% 
   tidyr::pivot_wider(names_from = rep_selection, values_from = FC_RPM_std) %>% 
   dplyr::mutate(
-    mean = (n1+n2)/2,
+    mean = (rep_1+rep_2)/2,
     res = str_extract(mt_res, '\\d+$'), 
     codon = case_when(
       mt_res == 'wt' ~ 'wt',
@@ -163,14 +163,14 @@ p_heat_codon <- df_FC %>%
 p_heat_aa <- df_FC %>% 
   dplyr::select(seq_aa, mt_res, conc_antibiotic, rep_selection, FC_RPM_std) %>% 
   dplyr::mutate(
-    rep_selection=str_c('n', rep_selection),
+    rep_selection=str_c('rep_', rep_selection),
     aa_pattern_number = row_number()
     ) %>% 
   dplyr::group_by(conc_antibiotic, mt_res, rep_selection, seq_aa) %>% 
   dplyr::reframe(FC_RPM_aa = mean(FC_RPM_std, na.rm = T), n=n()) %>% 
   tidyr::pivot_wider(names_from = rep_selection, values_from = FC_RPM_aa) %>% 
   mutate(
-    mean = (n1+n2)/2,
+    mean = (rep_1+rep_2)/2,
     res = str_extract(mt_res, '\\d+$'), 
     aa = case_when(
       mt_res == 'wt' ~ 'wt',
