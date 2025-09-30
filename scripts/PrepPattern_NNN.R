@@ -3,13 +3,16 @@
 
 args <- commandArgs(trailingOnly = T)
 
-# argument 1: input_peptide, like "ApdP"
+# argument 1: input_peptide
+# example: input_peptide <- 'CliM'
 input_peptide <- args[1]
 
-# argument 2: input sequence which is the target of mutation, like "CAGAGCAAGTGCATTCGCGCGCCGCCA"
+# argument 2: input sequence which is the target of mutation
+# example: input_string <- "AAGTATGTTTTAATAAGAGACATATTTGTAAATAGAATTACATATTCTGAAGAACGACTGCCTAAACAGTATATAGTTTTTCAGAAATATGATATTTGGCGGTATTGTAGTTTATTTAAA"
 input_string <- args[2]
 
-# argument 3: output file name, like 'ptn_ApdP_XXXtoYYY_NNN.csv'
+# argument 3: output file name
+# example: output <- 'output/ptn_CliM_38to77_NNN.csv'
 output <- args[3]
 
 
@@ -59,12 +62,11 @@ df_wt <- tibble(codon = v_split_codon) %>%
 
 
 # prep codon list
-df_all_codon <- tibble(
-  c1 = c('A', 'C', 'G', 'T'),
-  c2 = c('A', 'C', 'G', 'T'),
-  c3 = c('A', 'C', 'G', 'T')
-) %>% 
-  complete(c1, c2, c3) %>%
+df_all_codon <- expand_grid(
+  c1 = c("A", "C", "G", "T"),
+  c2 = c("A", "C", "G", "T"),
+  c3 = c("A", "C", "G", "T")
+)%>%
   transmute(codon = str_c(c1,c2,c3)) %>% 
   dplyr::mutate(wtmt = 'mt') %>%
   dplyr::left_join(
