@@ -170,7 +170,7 @@ df_tmp_RPM <- df_read_mapped %>%
   dplyr::left_join(df_SizeFactor, by = join_by(sample_number)) %>% 
   dplyr::mutate(RPM = reads * sf) %>% 
   
-  # change RPM to "NA" if t1/t2 reads are too low (using cutoff value)
+  # Replace RPM with ‘NA’ if the read counts at t1 or t2 are below the cutoff
   dplyr::mutate(
     RPM = if_else(
       reads >= read_cutoff, 
