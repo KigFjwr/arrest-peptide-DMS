@@ -52,7 +52,7 @@ df_wt <- tibble(codon = v_split_codon) %>%
     values_from = codon
   ) %>% 
   mutate(
-    object = input_peptide,
+    target = input_peptide,
     wtmt = 'wt',
     codon = 'wt',
     mt_res = 'wt',
@@ -98,8 +98,8 @@ df_all_pattern <- df_wt %>%
   # order列を調整
   dplyr::mutate(pattern_number = row_number()) %>% 
   
-  # object列を埋める
-  tidyr::fill(object) %>% 
+  # target列を埋める
+  tidyr::fill(target) %>% 
   
   # columns_to_combineで指定した列の値ををstr_cで結合する
   dplyr::mutate(seq = do.call(stringr::str_c, c(across(all_of(columns_to_combine)), sep = ""))) %>% 
