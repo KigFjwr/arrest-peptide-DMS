@@ -1,0 +1,9 @@
+#sample_number,bc5,bc7,sample_name,read_exp,lib_len,target,organism,antibiotic,conc_antibiotic,time,rep_cell_lib,rep_selection,rep_DNA_lib,cfu,culture_min,reads_pe1,reads_pe2
+1,TGG,ACC,SecM_JM109_t1_rep1,RH240510405,,SecM,JM109,spec,0,t1,1,1,1,0.761,0,JM109_SecM3X23B_1.fq.gz,JM109_SecM3X23B_2.fq.gz
+2,TGG,AGC,SecM_JM109_t2_s0_rep1,RH240510405,,SecM,JM109,spec,0,t2,1,1,1,5.64,77,JM109_SecM3X23B_1.fq.gz,JM109_SecM3X23B_2.fq.gz
+3,TGG,AGG,SecM_JM109_t2_s200_rep1,RH240510405,,SecM,JM109,spec,200,t2,1,1,1,8.8,119,JM109_SecM3X23B_1.fq.gz,JM109_SecM3X23B_2.fq.gz
+4,TGG,CTC,SecM_JM109_t2_s500_rep1,RH240510405,,SecM,JM109,spec,500,t2,1,1,1,9.68,135,JM109_SecM3X23B_1.fq.gz,JM109_SecM3X23B_2.fq.gz
+5,TGG,CTG,SecM_JM109_t1_rep2,RH240510405,,SecM,JM109,spec,0,t1,1,2,1,1.32,0,JM109_SecM3X23B_1.fq.gz,JM109_SecM3X23B_2.fq.gz
+6,TGG,TGC,SecM_JM109_t2_s0_rep2,RH240510405,,SecM,JM109,spec,0,t2,1,2,1,4.54,82,JM109_SecM3X23B_1.fq.gz,JM109_SecM3X23B_2.fq.gz
+7,TGG,TTA,SecM_JM109_t2_s200_rep2,RH240510405,,SecM,JM109,spec,200,t2,1,2,1,5.48,121,JM109_SecM3X23B_1.fq.gz,JM109_SecM3X23B_2.fq.gz
+8,TGG,TTG,SecM_JM109_t2_s500_rep2,RH240510405,,SecM,JM109,spec,500,t2,1,2,1,7.92,160,JM109_SecM3X23B_1.fq.gz,JM109_SecM3X23B_2.fq.gz
