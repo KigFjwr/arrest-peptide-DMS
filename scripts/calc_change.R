@@ -10,30 +10,30 @@ args[default_flg] <- default_args[default_flg]
 
 
 # argument 1: input file name of DMS-pattern list
-# example: input_pattern <- 'output/ptn_ApdA_S109toP123_NNK.csv'
+# example: input_pattern <- 'output/ptn_SecM_P132toP166_NNN.csv'
 input_pattern <- args[1]
 
 # argument 2: input sequence (5'->3' direction) which locate upstream of DMS-target region
-# example: input_region_5f <- 'CCCGCGCTCCTGGGTGTGCACGGTCACGGTGATCTGCCTCTCTTCGGCACCGTCCCGCACGGACCGGCGTCCACGACGCTGCTCCGCCTCAGCGAGCTCCACGACGAAGCAGCTCCCGCC' # 5'->3'
+# example: input_region_5f <- 'CCGCAAACACTGCCCGTTGCTGAAGAATCTTTGCCTCTTCAGGCGCAACATCTTGCATTACTGGATACGCTCAGCGCGCTGCTGACCCAGGAAGGCACG' # 5'->3'
 input_region_5f <- args[2]
 
 # argument 3: input sequence (5'->3' direction) which locate downstream of DMS-target region
-# example: input_region_3f <- 'TTCCCGGTAGCCGTCGACTATAAAGACGACGACGACAAA' # 5'->3'
+# example: input_region_3f <- 'CAACGCCTCACCGACTATAAAGACGACGACGACAAA' # 5'->3'
 input_region_3f <- args[3]
 
 # argument 4: suffix of the output file name
-# example: output_suffix <- 'ApdA_S109-P123_PY79_qc20'
+# example: output_suffix <- 'SecM_P132toP166_JM109_qctest1'
 output_suffix <- args[4]
 
 
 # optional
 
 # argument 5: phred quality score used
-# default: qc <- '20'
-qc <- args[5]
+# default: input_suffix <- 'test1'
+input_suffix <- args[5]
 
 # argument 6: read cutoff score
-# default: read_cutoff = 10
+# default: read_cutoff = 8
 read_cutoff <- as.numeric(args[6])
 
 # argument 7: sample_sheet file
@@ -71,7 +71,7 @@ df_pattern <- read_csv(input_pattern) %>%
 
 # input read files list
 read_files <- fs::dir_ls(path = 'output/fastp_qc/', recurse = T) %>% 
-  str_subset(qc) %>% # select files that contain reads filterd by phred score indicated
+  str_subset(str_c(input_suffix, '.fq.gz')) %>% # select files that contain reads filterd by phred score indicated
   str_subset('merged') %>% # select pair-end-merged file
   print()
 
