@@ -36,7 +36,7 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp lib_len target|| [ -
   echo output/fastp_qc/qc$score/${sample_name}_unpair_2_qc${score}.fq.gz | read output_unpair_2
 
   fastp \
-  -q $score \
+  -m \
   -i $input_read_1 \
   -I $input_read_2 \
   -o $output_read_1 \
@@ -46,9 +46,7 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp lib_len target|| [ -
   --unpaired2 $output_unpair_2 \
   -h output/fastp_qc/qc$score/report_${sample_name}.html \
   -j output/fastp_qc/qc$score/report_${sample_name}.json \
-  -c \
-  -m \
-  -e 35 \
+  -q 20 -u 30 -e 25 -n 5 -5 -3 -W 4 -M 20 \
   -l $lib_len \
   -w 8
 
