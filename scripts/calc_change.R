@@ -1,10 +1,10 @@
-# last update: 2025/10/01
+# last update: 2025/10/08
 
 # input -------------------------------------------------------------------
 
 args <- commandArgs(trailingOnly = T)
 
-default_args <- c("", "", "", "", "20", '8', 'input/sample_sheet.csv')   # default setting
+default_args <- c("", "", "", "", "", '8', 'input/sample_sheet.csv')   # default setting
 default_flg <- is.na(args[1:7])
 args[default_flg] <- default_args[default_flg]  
 
@@ -21,16 +21,17 @@ input_region_5f <- args[2]
 # example: input_region_3f <- 'CAACGCCTCACCGACTATAAAGACGACGACGACAAA' # 5'->3'
 input_region_3f <- args[3]
 
-# argument 4: suffix of the output file name
-# example: output_suffix <- 'SecM_P132toP166_JM109_qctest1'
-output_suffix <- args[4]
+# argument 4: input directory
+# default: input_dir <- 'test1'
+input_dir <- args[4]
+
+# argument 5: suffix of the output file name
+# example: output_suffix <- 'SecM_P132toP166_JM109'
+output_suffix <- args[5]
+
 
 
 # optional
-
-# argument 5: phred quality score used
-# default: input_suffix <- 'test1'
-input_suffix <- args[5]
 
 # argument 6: read cutoff score
 # default: read_cutoff = 8
@@ -70,9 +71,8 @@ df_pattern <- read_csv(input_pattern) %>%
 
 
 # input read files list
-read_files <- fs::dir_ls(path = 'output/fastp_qc/', recurse = T) %>% 
-  str_subset(str_c(input_suffix, '.fq.gz')) %>% # select files that contain reads filterd by phred score indicated
-  str_subset('merged') %>% # select pair-end-merged file
+read_files <- fs::dir_ls(path = str_c('output/fastq_merged/', input_dir), recurse = T) %>% 
+  str_subset('merged.fq.gz') %>% # select files that contain reads filterd by phred score indicated
   print()
 
 
@@ -83,17 +83,20 @@ df_read <- tibble(
   name = ShortRead::id(fq_read) %>% as.character() %>% str_extract('[[:graph:]]+')
 )
 
-
+ 
 # prepare output file names
-output_rpm <- str_c('output/calc/CalcRPM_', output_suffix, '.csv')
-output_fc <- str_c('output/calc/CalcGR_', output_suffix, '.csv')
-output_filter_out <- str_c('output/calc/CalcGR_', output_suffix, '_removed.csv')
-output_missing <- str_c('output/calc/CalcGR_', output_suffix, '_missing.csv')
+output_rpm <- str_c('output/calc/', input_dir, "/RPM_", output_suffix, '.csv') %>% print()
+output_fc <- str_c('output/calc/', input_dir, "/GR_", output_suffix, '.csv') %>% print()
+output_filter_out <- str_c('output/calc/', input_dir, "/GR_", output_suffix, '_removed.csv') %>% print()
+output_missing <- str_c('output/calc/', input_dir, "/GR_", output_suffix, '_missing.csv') %>% print()
 
 
 # prepare output directory
 if(!dir.exists('output/calc/')){
   dir.create('output/calc/')
+}
+if(!dir.exists(str_c('output/calc/', input_dir))){
+  dir.create(str_c('output/calc/', input_dir))
 }
 
 
