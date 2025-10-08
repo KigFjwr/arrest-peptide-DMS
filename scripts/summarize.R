@@ -370,7 +370,7 @@ ggsave(
 df_fitness %>% 
   arrange(rep_selection) %>% 
   write_csv(
-    input_calc_GR %>% 
-      str_replace('calc', 'fig') %>% 
-      str_replace('CalcGR', 'Fitness')
+    output_plot_hm_fn %>% 
+      str_replace('fitness', 'fitness_source') %>% 
+      str_replace('pdf', 'csv')
   )  
