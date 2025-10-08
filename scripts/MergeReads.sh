@@ -1,4 +1,5 @@
 #!/usr/bin/zsh
+
 set -e
 set -u
 set -o pipefail
@@ -6,18 +7,41 @@ set -o pipefail
 #-------------------------------------------
 
 # Arguments
+# デフォルト値
+sample_sheet="input/sample_sheet.csv"
+output_dir="qc1"
+qualified_quality_phred=20
+unqualified_percent_limit=30
+average_qual=25
+n_base_limit=5
 
-# argument $1: input file, sample sheet
-sample_sheet=${1:-input/sample_sheet.csv}
 
-# argument $2: QC cutoff score
-score=${2:-30}
+# getopts でオプションを処理
+while getopts "s:o:q:u:e:n:" OPT; do
+  case "$OPT" in
+    s) sample_sheet="$OPTARG" ;;
+    o) output_dir="$OPTARG" ;;
+    q) qualified_quality_phred="$OPTARG" ;;
+    u) unqualified_percent_limit="$OPTARG" ;;
+    e) average_qual="$OPTARG" ;;
+    n) n_base_limit="$OPTARG" ;;
+  esac
+done
 
+
+shift $((OPTIND - 1))  # 残りの位置引数を処理
+# 確認用出力
+echo "sample_sheet: $sample_sheet"
+echo "output_dir: $output_dir"
+echo "qualified_quality_phred: $qualified_quality_phred"
+echo "unqualified_percent_limit: $unqualified_percent_limit"
+echo "average_qual: $average_qual"
+echo "n_base_limit: $n_base_limit"
 
 #-------------------------------------------
 
 # 0. Prepare directories
-mkdir -p output/fastp_qc/qc$score
+mkdir -p output/fastq_merged/$output_dir
 
 
 # 1. read processing
@@ -29,11 +53,11 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp lib_len target|| [ -
   
   echo output/fastq_demultiplexed/$sample_name/*1.fq.gz | read input_read_1
   echo output/fastq_demultiplexed/$sample_name/*2.fq.gz | read input_read_2
-  echo output/fastp_qc/qc$score/${sample_name}_read_1_qc${score}.fq.gz | read output_read_1
-  echo output/fastp_qc/qc$score/${sample_name}_read_2_qc${score}.fq.gz | read output_read_2
-  echo output/fastp_qc/qc$score/${sample_name}_merged_qc${score}.fq.gz | read output_read_m
-  echo output/fastp_qc/qc$score/${sample_name}_unpair_1_qc${score}.fq.gz | read output_unpair_1
-  echo output/fastp_qc/qc$score/${sample_name}_unpair_2_qc${score}.fq.gz | read output_unpair_2
+  echo output/fastq_merged/$output_dir/${sample_name}_read_1.fq.gz | read output_read_1
+  echo output/fastq_merged/$output_dir/${sample_name}_read_2.fq.gz | read output_read_2
+  echo output/fastq_merged/$output_dir/${sample_name}_merged.fq.gz | read output_read_m
+  echo output/fastq_merged/$output_dir/${sample_name}_unpair_1.fq.gz | read output_unpair_1
+  echo output/fastq_merged/$output_dir/${sample_name}_unpair_2.fq.gz | read output_unpair_2
 
   fastp \
   -m \
@@ -44,13 +68,20 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp lib_len target|| [ -
   --merged_out $output_read_m \
   --unpaired1 $output_unpair_1 \
   --unpaired2 $output_unpair_2 \
-  -h output/fastp_qc/qc$score/report_${sample_name}.html \
-  -j output/fastp_qc/qc$score/report_${sample_name}.json \
-  -q 20 -u 30 -e 25 -n 5 -5 -3 -W 4 -M 20 \
+  -h output/fastq_merged/$output_dir/report_${sample_name}.html \
+  -j output/fastq_merged/$output_dir/report_${sample_name}.json \
+  -q $qualified_quality_phred \
+  -u $unqualified_percent_limit \
+  -e $average_qual \
+  -n $n_base_limit \
+  -5 \
+  -3 \
+  -W 4 \
+  -M 20 \
   -l $lib_len \
   -w 8
 
 done < $sample_sheet
 
 # last update
-# 2025/09/30
+# 2025/10/08
