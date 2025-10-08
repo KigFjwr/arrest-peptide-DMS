@@ -1,57 +1,89 @@
-# NGS read processing scripts for DMS
+# NGS Read Processing Scripts for DMS
 
-## 0. preparation
-- put read files (read_1 and read_2) into the input folder
-- put the md5 file supplied from NGS service to the input folder
-- prepare sample_sheet_read_proc.csv and put it into input folder  
-note: last column (named read_exp) is required in sample_sheet_read_proc.csv  
+This repository provides scripts for processing Illumina NGS reads used in Deep Mutational Scanning (DMS) experiments.
+The workflow includes MD5 check, demultiplexing, read quality filtering/merging, pattern generation, fitness calculation, and plotting.
 
+⸻
 
-## 1. check MD5
-script: check_md5sum.R  
-description: a code to check downloaded files  
-required: input/[read_1].fq.gz input/[read_2].fq.gz, input/md5.txt  
+## Usage Overview
 
-```usage example
-$ Rscript scripts/check_md5sum.R [input/read1.fq.gz] [input/read2.fq.gz] [input/md5.txt]
+Step 0. Preparation  
+- Place paired-end read files (read_1.fq.gz, read_2.fq.gz) and the MD5 checksum file in the input folder. 
+- Add information to 'sample_sheet.csv'.   
+
+⸻
+
+## Step 1. MD5 Check
+
+Script: check_md5sum.R  
+Description: Verify integrity of downloaded read files.   
+Dependencies: R (tidyverse)  
+
+```bash
+Rscript scripts/check_md5sum.R input/read_1.fq.gz input/read_2.fq.gz input/md5.txt
 ```
 
-## 2. check read quality
-script: fastqc_raw.sh  
-description: a code to check read quality  
+⸻
 
-```
-$ cd /path/to/read_processing
-$ zsh scripts/fastqc_raw.sh
-```
+## Step 2. Demultiplexing
 
-## 3. demultiplexing
-script: demultiplexing_seqkit.sh  
-description: a code for demultiplexing reads  
-required: input/sample_sheet_read_proc.csv  
-note: fastq_sepalated folder will be created, but there is no need to keep it for a long time. Please delete it as needed.  
+Script: Demultiplexing.sh  
+Description: Split reads by sample using fastp   
+Dependencies: fastp  
+Note: The folder fastq_separated will be generated and can be deleted after use.   
 
-```
-$ zsh scripts/demultiplexing_seqkit.sh [input/read_1.fq.gz] [input/read_2.fq.gz]
+```bash
+zsh scripts/Demultiplexing.sh input/read_1.fq.gz input/read_2.fq.gz input/sample_sheet.csv
 ```
 
+⸻
 
-## 4. Prep patten list
-script: PrepPattern_NNN.R or PrepPattern_NNK.R
-description: a code for  
-required: DMS target sequence  
+## Step 3. Quality Check & Read Merging
 
+Script: MergeReads.sh    
+Description: Assess read quality and merge paired-end reads.     
+Dependencies: fastp    
+
+```bash
+zsh scripts/MergeReads.sh -s input/sample_sheet.csv -o <output_dir>
+# with custom fastp options:
+zsh scripts/MergeReads.sh -s input/sample_sheet.csv -o <output_dir> -q 20 -u 30 -e 25 -n 5
 ```
-Rscript PrepPattern_NNN.R <seq_name> <seq> <output>
 
+⸻
+
+## Step 4. Generate DMS Pattern List
+
+Script: PrepPattern_NNN.R or PrepPattern_NNK.R    
+Description: Create a list of all possible DMS mutant sequences.     
+Dependencies: R (tidyverse, Biostrings, gtools)    
+
+```bash
+Rscript scripts/PrepPattern_NNK.R <target_name> <target_sequence> <output_name>
 ```
 
----
-## required (checekd version)
-- fastp v0.23.4
-- SeqKit v2.5.1
-- R version v4.3.0
-- R packages
-  - tidyverse, v2.0.0
-  - Biostrings, v2.72.1
-  - ShorRead, v1.62.0
+⸻
+
+## Step 5. Calculate Growth Rate
+
+Script: calc_change.R    
+Description: Compute growth rate change from merged read counts.     
+Dependencies: R (tidyverse, ShortRead)    
+
+```bash
+Rscript scripts/calc_change.R <pattern_list> <5_seq> <3_seq> <merged_reads_dir> <DMS_name> <cutoff> <sample_sheet>
+```
+
+⸻
+
+## Step 6. Plot Results
+
+Script: summarize.R    
+Description: Complute relative fitness and generate summary plots of DMS results.     
+Dependencies: R (tidyverse, Biostrings, ggthemes, patchwork)    
+
+```bash
+Rscript scripts/summarize.R <DMS_name> <region_start> <region_end> <growth_rate_csv> <pattern_list> <output_suffix>
+```
+
+⸻
