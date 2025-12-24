@@ -82,6 +82,3 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp lib_len target|| [ -
   -w 8
 
 done < $sample_sheet
-
-# last update
-# 2025/10/08
