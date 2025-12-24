@@ -33,7 +33,7 @@ input_target_AA_number_s <- as.numeric(args[2])
 # example: input_target_AA_number_e <- 77
 input_target_AA_number_e <- as.numeric(args[3])
 
-# argument 4: input csv file, fitness list
+# argument 4: input csv file, growth rate list
 # example: input_calc_GR <- 'output/calc/qc1/GR_CliM_K38-K77_PY79.csv'
 input_calc_GR <- args[4]
 
