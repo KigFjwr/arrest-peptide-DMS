@@ -20,7 +20,7 @@ analyses described in this repository.
 ---
 
 ## Directory structure (recommended)
-
+```
 .
 ├── input/
 │   ├── *_read_1.fq.gz
@@ -38,6 +38,7 @@ analyses described in this repository.
     ├── ptn/
     ├── calc/
     └── figures/
+```
 
 ---
 
