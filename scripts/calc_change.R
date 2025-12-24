@@ -229,8 +229,6 @@ df_change <- df_RPM %>%
   dplyr::left_join(df_t1, by = join_by(pattern_number, rep_selection)) %>% 
   group_by(sample_number) %>% 
   dplyr::mutate(
-    relative_Fitness = log2(t2_RPM /t1_RPM ),
-    rFitness_per_hour = log2(t2_RPM /t1_RPM ) / (t2_culture_min/60),
     Growth_Rate = log2(t2_cfu/t1_cfu * t2_RPM /t1_RPM ) / (t2_culture_min/60),
   ) %>% 
   ungroup() %>% 
@@ -238,7 +236,7 @@ df_change <- df_RPM %>%
 
 
 df_change %>% 
-  dplyr::select(target, organism, pattern_number, wtmt, mt_res, codon, seq, seq_aa, HasStopCodon, antibiotic, conc_antibiotic, rep_cell_lib, rep_selection, rep_DNA_lib,  t1_reads, t2_reads, t1_cfu, t2_cfu, t2_culture_min, t1_RPM, t2_RPM, relative_Fitness, rFitness_per_hour, Growth_Rate) %>%
+  dplyr::select(target, organism, pattern_number, wtmt, mt_res, codon, seq, seq_aa, HasStopCodon, antibiotic, conc_antibiotic, rep_cell_lib, rep_selection, rep_DNA_lib,  t1_reads, t2_reads, t1_cfu, t2_cfu, t2_culture_min, t1_RPM, t2_RPM, Growth_Rate) %>%
   dplyr::arrange(pattern_number, rep_selection, conc_antibiotic) %>%
   write_csv(output_fc)
 
@@ -249,7 +247,7 @@ df_change %>%
 # output removed raws
 df_change %>% 
   filter(is.na(Growth_Rate)) %>% 
-  dplyr::select(target, organism, pattern_number, wtmt, mt_res, codon, seq, seq_aa, HasStopCodon, antibiotic, conc_antibiotic, rep_cell_lib, rep_selection, rep_DNA_lib, t1_cfu, t2_cfu, t2_culture_min, t1_reads, t2_reads, t1_RPM, t2_RPM, relative_Fitness, rFitness_per_hour, Growth_Rate) %>% 
+  dplyr::select(target, organism, pattern_number, wtmt, mt_res, codon, seq, seq_aa, HasStopCodon, antibiotic, conc_antibiotic, rep_cell_lib, rep_selection, rep_DNA_lib, t1_cfu, t2_cfu, t2_culture_min, t1_reads, t2_reads, t1_RPM, t2_RPM, Growth_Rate) %>% 
   write_csv(output_filter_out)
 
 
