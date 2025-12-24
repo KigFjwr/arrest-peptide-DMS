@@ -1,27 +1,30 @@
 # arrest-peptide-DMS
 
 NGS read processing and analysis scripts for deep mutational scanning (DMS)
-of translational arrest peptides.
+of translational arrest peptides.  
 
 This repository documents a complete analysis pipeline used in our study.
 For reproducibility of published results, the analysis can start from
 demultiplexed FASTQ files deposited in public repositories (e.g. DRA).
 For newly generated sequencing data, the full pipeline can also be executed
 starting from raw FASTQ files, including checksum verification and
-demultiplexing.
+demultiplexing.  
 
 ---
 
 ## Notes on data availability and reproducibility
 
 Sequencing reads deposited in public repositories (e.g. DRA) correspond to
-**demultiplexed FASTQ files**.
+**demultiplexed FASTQ files**.  
 When using these data, the analysis starts from the *read quality filtering
-and paired-end merging* step.
+and paired-end merging* step.  
 
 For newly generated sequencing data obtained directly from a sequencing
 service, the full pipeline can be executed starting from raw FASTQ files,
-including MD5 checksum verification and demultiplexing.
+including MD5 checksum verification and demultiplexing.  
+
+The version of the code used for published analyses is identified by
+a tagged release in this repository.  
 
 ---
 
