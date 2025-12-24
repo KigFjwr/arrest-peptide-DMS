@@ -74,6 +74,3 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}
 
 
 done < $sample_sheet
-
-# last update
-# 2025/09/30
