@@ -288,10 +288,3 @@ Rscript scripts/summarize.R \
 
 ⸻
 
-## Notes for reuse
-
-This pipeline is provided as a reference implementation.
-Differences in library design, sequencing strategy, or data deposition
-may require modifications by individual users.
-
----
