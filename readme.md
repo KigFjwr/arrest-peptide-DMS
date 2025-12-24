@@ -145,11 +145,11 @@ Description:
 	•	Reads are split using seqkit split, assigned to samples, and re-paired.
 
 Output:
-
+```
 output/fastq_demultiplexed/<sample_name>/
   ├── <sample_name>_read_1.fq.gz
   └── <sample_name>_read_2.fq.gz
-
+```
 Example:
 ```
 zsh scripts/Demultiplexing.sh \
