@@ -207,14 +207,18 @@ Rscript scripts/PrepPattern_NNK.R \
 
 ⸻
 
-## 5. Fitness calculation
+## 5. Growth rate estimation
 
 Script:
 - calc_change.R
 
 Description:
-Maps merged reads to DMS patterns, calculates RPM, and computes growth and
-fitness metrics between time points.
+Maps merged reads to the DMS pattern list and calculates growth-rate–based
+metrics for each mutant.
+In the current implementation, this step focuses on estimating **growth rate
+(GR)** from read counts and experimental metadata.
+Fitness values relative to control conditions are derived in the subsequent
+plotting and summarization step.
 
 Output:
 - output/calc/<input_dir>/
@@ -243,8 +247,11 @@ Script:
 - summarize.R
 
 Description:
-Generates reproducibility scatter plots and heatmaps for growth rate and
-fitness, and outputs source data tables.
+Generates summary plots from growth-rate tables produced in Step 5 and
+**derives fitness values by comparing growth rates between baseline and
+treated conditions**.
+This step produces reproducibility plots and heatmaps at codon and
+amino-acid levels.
 
 Output:
 - PDF figures in output/fig/
