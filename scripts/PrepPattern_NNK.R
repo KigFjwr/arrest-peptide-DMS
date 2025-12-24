@@ -28,8 +28,8 @@ library(gtools)
 
 
 # prepare output directory
-if(!dir.exists('output/ptn')){
-  dir.create('output/ptn')
+if(!dir.exists('output/')){
+  dir.create('output/')
 }
 if(!dir.exists('output/ptn')){
   dir.create('output/ptn')
