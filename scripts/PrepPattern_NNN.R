@@ -12,7 +12,7 @@ input_peptide <- args[1]
 input_string <- args[2]
 
 # argument 3: output file name
-# example: output <- 'output/ptn_CliM_38to77_NNN.csv'
+# example: output <- 'output/ptn/ptn_CliM_38to77_NNN.csv'
 output <- args[3]
 
 
@@ -31,8 +31,8 @@ library(gtools)
 if(!dir.exists('output/')){
   dir.create('output/')
 }
-if(!dir.exists('output/')){
-  dir.create('output/')
+if(!dir.exists('output/ptn')){
+  dir.create('output/ptn')
 }
 
 
