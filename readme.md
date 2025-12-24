@@ -107,10 +107,10 @@ all steps. Required columns increase progressively in downstream analyses.
 
 ## 0. Preparation
 
-- Place raw paired-end FASTQ files (`*_read_1.fq.gz`, `*_read_2.fq.gz`) in `input/`
-- Place the checksum file (`md5.txt`) provided by the sequencing service in `input/`
-- Prepare `input/sample_sheet.csv`
-- (Optional) Prepare `input/plot_order.csv` to control heatmap ordering
+- Place raw paired-end FASTQ files (`*_read_1.fq.gz`, `*_read_2.fq.gz`) in `input/`  
+- Place the checksum file (`md5.txt`) provided by the sequencing service in `input/`  
+- Prepare `input/sample_sheet.csv`  
+- (Optional) Prepare `input/plot_order.csv` to control heatmap ordering  
 
 ---
 
@@ -119,7 +119,7 @@ all steps. Required columns increase progressively in downstream analyses.
 **Required only when starting from raw FASTQ files obtained directly from a
 sequencing service.**
 
-Script:
+Script:  
 - `check_md5sum.R`
 
 Example:
@@ -137,12 +137,12 @@ Rscript scripts/check_md5sum.R \
 
 Not required when using demultiplexed FASTQ files deposited in DRA.
 
-Script:
-	•	Demultiplexing.sh
+Script:  
+- Demultiplexing.sh 
 
-Description:
-	•	Barcodes (bc7) are expected at positions 7–9 of read_2.
-	•	Reads are split using seqkit split, assigned to samples, and re-paired.
+Description:  
+- Barcodes (bc7) are expected at positions 7–9 of read_2   
+- Reads are split using seqkit split, assigned to samples, and re-paired.  
 
 Output:
 ```
@@ -165,16 +165,16 @@ zsh scripts/Demultiplexing.sh \
 Standard starting point when using demultiplexed FASTQ files.
 
 Script:
-	•	MergeReads.sh
+- MergeReads.sh
 
 Input:
-	•	output/fastq_demultiplexed/<sample_name>/*_read_1.fq.gz
-	•	output/fastq_demultiplexed/<sample_name>/*_read_2.fq.gz
+- output/fastq_demultiplexed/<sample_name>/*_read_1.fq.gz
+- output/fastq_demultiplexed/<sample_name>/*_read_2.fq.gz
 
 Output:
-	•	output/fastq_merged/<output_dir>/
-	•	merged, unpaired FASTQs
-	•	fastp HTML/JSON reports
+- output/fastq_merged/<output_dir>/
+- merged, unpaired FASTQs
+- fastp HTML/JSON reports
 
 Example:
 ```
@@ -192,8 +192,8 @@ zsh scripts/MergeReads.sh \
 ## 4. Preparation of DMS mutant pattern list
 
 Scripts:
-	•	PrepPattern_NNK.R
-	•	PrepPattern_NNN.R
+- PrepPattern_NNK.R
+- PrepPattern_NNN.R
 
 Note: Either NNK or NNN is used depending on library design.
 
@@ -210,18 +210,18 @@ Rscript scripts/PrepPattern_NNK.R \
 ## 5. Fitness calculation
 
 Script:
-	•	calc_change.R
+- calc_change.R
 
 Description:
 Maps merged reads to DMS patterns, calculates RPM, and computes growth and
 fitness metrics between time points.
 
 Output:
-	•	output/calc/<input_dir>/
-	•	RPM_<output_suffix>.csv
-	•	GR_<output_suffix>.csv
-	•	GR_<output_suffix>_removed.csv
-	•	GR_<output_suffix>_missing.csv
+- output/calc/<input_dir>/
+- RPM_<output_suffix>.csv
+- GR_<output_suffix>.csv
+- GR_<output_suffix>_removed.csv
+- GR_<output_suffix>_missing.csv
 
 Example:
 ```
@@ -240,15 +240,15 @@ Rscript scripts/calc_change.R \
 ## 6. Visualization and summary
 
 Script:
-	•	summarize.R
+- summarize.R
 
 Description:
 Generates reproducibility scatter plots and heatmaps for growth rate and
 fitness, and outputs source data tables.
 
 Output:
-	•	PDF figures in output/fig/
-	•	Source CSV for fitness heatmaps
+- PDF figures in output/fig/
+- Source CSV for fitness heatmaps
 
 Example:
 ```
@@ -264,17 +264,17 @@ Rscript scripts/summarize.R \
 ⸻
 
 ## Software requirements (tested versions)
-	•	fastp v0.24.0
-	•	SeqKit v2.10.0
-	•	R v4.5.0
+- fastp v0.24.0
+- SeqKit v2.10.0
+- R v4.5.0
 
 ## R packages:
-	•	tidyverse v2.0.0
-	•	Biostrings v2.76.0
-	•	ShortRead v1.66.0
-	•	gtools v3.9.5
-	•	ggthemes v5.1.0
-	•	patchwork v1.3.2
+- tidyverse v2.0.0
+- Biostrings v2.76.0
+- ShortRead v1.66.0
+- gtools v3.9.5
+- ggthemes v5.1.0
+- patchwork v1.3.2
 
 ⸻
 
