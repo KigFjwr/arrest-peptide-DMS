@@ -1,4 +1,4 @@
-# NGS Read Processing and Analysis Scripts for Deep Mutational Scanning (DMS)
+# NGS Read Processing and Analysis Pipeline for Reporter-based Deep Mutational Scanning of Arrest Peptides
 
 This repository contains scripts used for NGS data processing and analysis
 in a deep mutational scanning (DMS) study.
