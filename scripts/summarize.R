@@ -23,27 +23,27 @@ default_flg <- is.na(args[1:13])
 args[default_flg] <- default_args[default_flg]  
 
 # argument 1: target name
-# example: input_target <- 'ApdA_S109toP123_PY79'
+# example: input_target <- 'CliM_K38-K77_PY79'
 input_target <- args[1]
 
 # argument 2: DMS_start residue number
-# example: input_target_AA_number_s <- 109
+# example: input_target_AA_number_s <- 38
 input_target_AA_number_s <- as.numeric(args[2])
 
 # argument 3: DMS_end residue number
-# example: input_target_AA_number_e <- 123
+# example: input_target_AA_number_e <- 77
 input_target_AA_number_e <- as.numeric(args[3])
 
 # argument 4: input csv file, fitness list
-# example: input_calc_GR <- 'output/calc/CalcGR_ApdA_S109-P123_PY79_qc30_co10.csv'
+# example: input_calc_GR <- 'output/calc/qc1/GR_CliM_K38-K77_PY79.csv'
 input_calc_GR <- args[4]
 
 # argument 5: input csv file, mutation pattern list
-# example: input_pattern <- 'output/ptn_ApdA_S109toP123_NNK.csv'
+# example: input_pattern <- 'output/ptn/ptn_CliM_K38toK77_NNK.csv'
 input_pattern <-  args[5]
 
 # argument 6: output suffix
-# example: output_suffix <- 'qc30_co10'
+# example: output_suffix <- 'qc1'
 output_suffix <-  args[6]
 
 
