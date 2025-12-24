@@ -10,15 +10,15 @@ args[default_flg] <- default_args[default_flg]
 
 
 # argument 1: input file name of DMS-pattern list
-# example: input_pattern <- 'output/ptn_SecM_P132toP166_NNN.csv'
+# example: input_pattern <- 'output/ptn/ptn_CliM_K38toK77_NNK.csv'
 input_pattern <- args[1]
 
 # argument 2: input sequence (5'->3' direction) which locate upstream of DMS-target region
-# example: input_region_5f <- 'CCGCAAACACTGCCCGTTGCTGAAGAATCTTTGCCTCTTCAGGCGCAACATCTTGCATTACTGGATACGCTCAGCGCGCTGCTGACCCAGGAAGGCACG' # 5'->3'
+# example: input_region_5f <- 'AGAGACCACATGGTCCTTCTTGAGTTTGTAACAGCTGCTGGGATTACACATGGCATGGATGAACTATACAAAAAAGACCTCTTAAATCATAAAATT' # 5'->3'
 input_region_5f <- args[2]
 
 # argument 3: input sequence (5'->3' direction) which locate downstream of DMS-target region
-# example: input_region_3f <- 'CAACGCCTCACCGACTATAAAGACGACGACGACAAA' # 5'->3'
+# example: input_region_3f <- 'GACTATAAAGACGACGACGACAAA' # 5'->3'
 input_region_3f <- args[3]
 
 # argument 4: input directory
@@ -26,7 +26,7 @@ input_region_3f <- args[3]
 input_dir <- args[4]
 
 # argument 5: suffix of the output file name
-# example: output_suffix <- 'SecM_P132toP166_JM109'
+# example: output_suffix <- 'CliM_K38-K77_PY79'
 output_suffix <- args[5]
 
 
