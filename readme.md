@@ -86,7 +86,7 @@ all steps. Required columns increase progressively in downstream analyses.
 | `organism` | Organism name (metadata, used in downstream summaries). |
 | `antibiotic` | Antibiotic used during selection. |
 | `conc_antibiotic` | Antibiotic concentration used as a condition variable. |
-| `time` | Time point identifier (e.g. `t1`, `t2`). |
+| `time` | Time point identifier (e.g. `t0`, `t1`). |
 | `rep_cell_lib` | Replicate identifier for cell libraries. |
 | `rep_selection` | Replicate identifier for selection experiments. |
 | `rep_DNA_lib` | Replicate identifier for DNA libraries. |
