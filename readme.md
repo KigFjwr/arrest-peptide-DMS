@@ -93,7 +93,7 @@ all steps. Required columns increase progressively in downstream analyses.
 | `rep_cell_lib` | Replicate identifier for cell libraries. |
 | `rep_selection` | Replicate identifier for selection experiments. |
 | `rep_DNA_lib` | Replicate identifier for DNA libraries. |
-| `cfu` | Colony-forming units used for growth-rate calculations. |
+| `cfu` | Colony-forming units (x10^7 CFU/mL) used for growth-rate calculations. |
 | `culture_min` | Culture time (minutes) used for growth-rate normalization. |
 | `reads_pe1` | File name of the raw paired-end read 1 FASTQ file (e.g. `*_1.fq.gz`). |
 | `reads_pe2` | File name of the raw paired-end read 2 FASTQ file (e.g. `*_2.fq.gz`). |
