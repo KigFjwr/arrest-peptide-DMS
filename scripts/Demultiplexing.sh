@@ -2,6 +2,7 @@
 set -e
 set -u
 set -o pipefail
+setopt extended_glob null_glob
 
 #-------------------------------------------
 
@@ -38,10 +39,21 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}
         continue
      fi
      
-     # Setting up the source file for copying
-     echo output/fastq_separated/*$bc7.fq.gz | read copy_from
-     # Setting up the destination file name for copying
-     echo output/fastq_separated/tmp/${sample_name}.fq.gz | read copy_to
+    # find source file: accept .fq.gz or .fastq.gz
+    matches=(output/fastq_separated/*${bc7}.(fq|fastq).gz(N))
+
+    if (( ${#matches} == 0 )); then
+      echo "ERROR: No file matched bc7=${bc7} in output/fastq_separated/" >&2
+      exit 1
+    elif (( ${#matches} > 1 )); then
+      echo "ERROR: Multiple files matched bc7=${bc7}:" >&2
+      printf '%s\n' "${matches[@]}" >&2
+      exit 1
+    fi
+
+    copy_from="${matches[1]}"
+    copy_to="output/fastq_separated/tmp/${sample_name}.fq.gz"
+
      # print
      echo $copy_from $copy_to
      # copy
@@ -74,3 +86,5 @@ while IFS=, read sample_number bc5 bc7 sample_name read_exp || [ -n "${read_exp}
 
 
 done < $sample_sheet
+
+## version 2512227
