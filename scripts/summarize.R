@@ -287,29 +287,34 @@ ggsave(output_plot_rep_fn, p_rep_FN, width = 5, height = 6)
 ### prepare dataframe for heatmap
 ### plot
 df_plot_heatmap_gr <- df_GR %>% 
-    dplyr::select(pattern_number, seq, seq_aa, antibiotic, wtmt, mt_res, codon, sel_condition, rep_selection, Growth_Rate) %>%
-    dplyr::mutate(
-      rep_selection=str_c('rep_', rep_selection)
-    ) %>%
-    tidyr::pivot_wider(names_from = rep_selection, values_from = Growth_Rate) %>%
-    dplyr::mutate(
-      mean = (rep_1+rep_2)/2,
-      res = str_extract(mt_res, '\\d+$'),
-      # codon = case_when(
-      #   mt_res == 'wt' ~ 'wt',
-      #   str_sub(mt_res, 1,1) == 'r' ~ str_sub(seq, as.integer(str_extract(mt_res, '\\d+$'))*3-2, as.integer(str_extract(mt_res, '\\d+$'))*3)
-      # ),
-      res_plot = if_else(
-        !is.na(res),
-        as.character(input_target_AA_number_s + as.integer(res) - 1),
-        res
-      )
-    ) %>%
-    dplyr::left_join(df_ac_order, by = 'codon')
+  dplyr::select(pattern_number, seq, seq_aa, antibiotic, wtmt, mt_res, codon, sel_condition, rep_selection, Growth_Rate) %>%
+  dplyr::mutate(
+    rep_selection=str_c('rep_', rep_selection)
+  ) %>%
+  tidyr::pivot_wider(names_from = rep_selection, values_from = Growth_Rate) %>%
+  dplyr::mutate(
+    mean = (rep_1+rep_2)/2,
+    res = str_extract(mt_res, '\\d+$'),
+    # codon = case_when(
+    #   mt_res == 'wt' ~ 'wt',
+    #   str_sub(mt_res, 1,1) == 'r' ~ str_sub(seq, as.integer(str_extract(mt_res, '\\d+$'))*3-2, as.integer(str_extract(mt_res, '\\d+$'))*3)
+    # ),
+    res_plot = if_else(
+      !is.na(res),
+      as.character(input_target_AA_number_s + as.integer(res) - 1),
+      res
+    )
+  ) %>%
+  dplyr::left_join(df_ac_order, by = 'codon')
+
+df_plot_heatmap_gr_aa <- df_plot_heatmap_gr %>%
+  dplyr::group_by(sel_condition, antibiotic, res_plot, aa) %>%
+  dplyr::summarise(mean = mean(mean, na.rm = TRUE), .groups = "drop") %>%
+  dplyr::left_join(df_aa_order, by = "aa")   # plot_order をAA順に
 
 ### plot
 p_hm_gr_cdn <- df_plot_heatmap_gr %>% fx_plot_heatmap(aa_codon, antibiotic, 'GR, empty: wild-type, grey: missing') + facet_wrap(~sel_condition)
-p_hm_gr_aa <- df_plot_heatmap_gr %>% fx_plot_heatmap(aa, antibiotic, 'GR, empty: wild-type, grey: missing') + facet_wrap(~sel_condition)
+p_hm_gr_aa <- df_plot_heatmap_gr_aa %>% fx_plot_heatmap(aa, antibiotic, 'GR, empty: wild-type, grey: missing') + facet_wrap(~sel_condition)
 p_hm_gr <- patchwork::wrap_plots(p_hm_gr_cdn)/patchwork::wrap_plots(p_hm_gr_aa) +
   plot_annotation(
     title = input_target,
@@ -359,9 +364,9 @@ ggsave(
   p_hm_fn, 
   width = 9*(input_target_AA_number_e - input_target_AA_number_s)/8,
   height = 10
-  )
+)
 
- 
+
 
 # output source data ------------------------------------------------------
 
