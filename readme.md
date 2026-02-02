@@ -264,12 +264,17 @@ Example:
 ```
 Rscript scripts/summarize.R \
   TARGET_NAME \
-  38 \
-  77 \
+  DMS_START_RES \
+  DMS_END_RES \
   output/calc/qc1/GR_TARGET_NAME.csv \
   output/ptn/ptn_TARGET_NNK.csv \
   qc1
 ```
+where:
+- `DMS_START_RES` is the **first amino-acid residue number** of the DMS target region
+- `DMS_END_RES` is the **last amino-acid residue number** of the DMS target region  
+  (residue numbering follows the wild-type protein sequence)
+
 
 ⸻
 
