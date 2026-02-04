@@ -9,7 +9,7 @@ default_args <- c(
   "", 
   "", 
   "", 
-  "", 
+  "qc1", 
   "conc_antibiotic",
   "0",
   'output/fig/reproducibility_growth_rate.pdf',
@@ -348,9 +348,16 @@ df_plot_heatmap_fn <- df_fitness %>%
   dplyr::left_join(df_ac_order, by = 'codon') %>%
   group_split(condition_treated)
 
+df_plot_heatmap_fn_aa <- df_plot_heatmap_fn %>%
+  purrr::map(~ .x %>%
+               dplyr::group_by(condition_treated, res_plot, aa) %>%   # ★追加
+               dplyr::summarise(mean = mean(mean, na.rm = TRUE), .groups = "drop") %>%
+               dplyr::left_join(df_aa_order, by = "aa")
+  )
+
 ### plot
 p_hm_fn_cdn <- df_plot_heatmap_fn %>% purrr::map(~ fx_plot_heatmap(.x, aa_codon, condition_treated, 'GR_treated / GR_control, empty: wild-type, grey: missing'))
-p_hm_fn_aa <- df_plot_heatmap_fn %>% purrr::map(~ fx_plot_heatmap(.x, aa, condition_treated, 'GR_treated / GR_control, empty: wild-type, grey: missing'))
+p_hm_fn_aa <- df_plot_heatmap_fn_aa %>% purrr::map(~ fx_plot_heatmap(.x, aa, condition_treated, 'GR_treated / GR_control, empty: wild-type, grey: missing'))
 p_hm_fn <- patchwork::wrap_plots(p_hm_fn_cdn)/patchwork::wrap_plots(p_hm_fn_aa)  +
   plot_annotation(
     title = input_target,
@@ -378,3 +385,4 @@ df_fitness %>%
       str_replace('fitness', 'fitness_source') %>% 
       str_replace('pdf', 'csv')
   )  
+
